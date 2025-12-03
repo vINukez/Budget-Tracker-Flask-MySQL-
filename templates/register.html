@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrieren - Budget Tracker</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f093fb 0%, #f5576c 100%);padding:20px;position:relative;overflow:hidden}
+        body::before{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle, rgba(255,255,255,0.15), transparent);border-radius:50%;top:-300px;left:-300px;animation:float 6s ease-in-out infinite}
+        body::after{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle, rgba(255,255,255,0.1), transparent);border-radius:50%;bottom:-250px;right:-250px;animation:float 7s ease-in-out infinite reverse}
+        @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,30px)}}
+        .container{background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border-radius:30px;padding:50px 40px;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-width:450px;width:100%;position:relative;z-index:1;animation:slideIn .5s ease}
+        @keyframes slideIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+        .logo-container{text-align:center;margin-bottom:30px}
+        .logo{width:70px;height:70px;margin:0 auto 15px;background:linear-gradient(135deg,#f093fb,#f5576c);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;box-shadow:0 10px 30px rgba(240,147,251,0.4)}
+        h2{color:#2d3748;font-size:32px;font-weight:700;margin-bottom:10px;text-align:center}
+        .subtitle{text-align:center;color:#718096;margin-bottom:35px;font-size:15px}
+        form{display:flex;flex-direction:column;gap:20px}
+        .input-group{position:relative}
+        .input-group svg{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:#a0aec0;pointer-events:none}
+        input[type="text"],input[type="password"]{width:100%;padding:16px 16px 16px 50px;border:2px solid #e2e8f0;border-radius:15px;font-size:16px;transition:all .3s ease;background:#f7fafc;color:#2d3748;font-family:'Inter',sans-serif}
+        input:focus{outline:none;border-color:#f093fb;background:white;box-shadow:0 0 0 4px rgba(240,147,251,0.1)}
+        input::placeholder{color:#a0aec0}
+        button{padding:16px;font-size:17px;font-weight:600;border:none;border-radius:15px;background:linear-gradient(135deg,#f093fb,#f5576c);color:white;cursor:pointer;transition:all .3s ease;margin-top:10px;box-shadow:0 10px 25px rgba(240,147,251,.3)}
+        button:hover{transform:translateY(-2px);box-shadow:0 15px 35px rgba(240,147,251,.4)}
+        .login-link{text-align:center;margin-top:18px}
+        .login-link a{color:#f093fb;text-decoration:none;font-weight:600;transition:all .3s ease;font-size:15px}
+        .login-link a:hover{color:#f5576c;text-decoration:underline}
+        .error{color:#c026d3;text-align:center;margin-top:6px}
+    </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-container">
+      <div class="logo">🚀</div>
+      <h2>Konto erstellen</h2>
+      <p class="subtitle">Starte jetzt deine finanzielle Reise</p>
+    </div>
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+    <form method="POST" action="{{ url_for('register') }}">
+      <div class="input-group">
+        <input type="text" name="username" placeholder="Benutzername wählen" required>
+      </div>
+      <div class="input-group">
+        <input type="password" name="password" placeholder="Sicheres Passwort" required>
+      </div>
+      <button type="submit">Konto erstellen</button>
+    </form>
+    <div class="login-link"><a href="{{ url_for('login') }}">Bereits ein Konto? Hier einloggen →</a></div>
+  </div>
+</body>
+</html>

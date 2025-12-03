@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Tracker</title>
+  <!-- identisches Styling wie register.html -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f093fb 0%, #f5576c 100%);padding:20px;position:relative;overflow:hidden}
+    body::before{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle, rgba(255,255,255,0.15), transparent);border-radius:50%;top:-300px;left:-300px;animation:float 6s ease-in-out infinite}
+    body::after{content:'';position:absolute;width:500px;height:500px;background:radial-gradient(circle, rgba(255,255,255,0.1), transparent);border-radius:50%;bottom:-250px;right:-250px;animation:float 7s ease-in-out infinite reverse}
+    @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,30px)}}
+    .container{background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border-radius:30px;padding:40px 32px;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-width:520px;width:100%;position:relative;z-index:1;animation:slideIn .5s ease;text-align:center}
+    @keyframes slideIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    .logo{width:80px;height:80px;margin:0 auto 16px;background:linear-gradient(135deg,#f093fb,#f5576c);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:40px;box-shadow:0 10px 30px rgba(240,147,251,0.4)}
+    h1{color:#2d3748;font-size:32px;font-weight:800;margin-bottom:8px}
+    p{color:#718096;margin-bottom:20px}
+    .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .btn{padding:14px 20px;border:0;border-radius:14px;font-weight:700;background:linear-gradient(135deg,#f093fb,#f5576c);color:#fff;cursor:pointer;text-decoration:none}
+    .btn.alt{background:#fff;color:#f5576c;border:2px solid #ffd1e6}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">💰</div>
+    <h1>Budget Tracker</h1>
+    <p>Behalte Einnahmen & Ausgaben im Blick.</p>
+    <div class="row">
+      <a class="btn" href="{{ url_for('register') }}">Registrieren</a>
+      <a class="btn alt" href="{{ url_for('login') }}">Einloggen</a>
+    </div>
+  </div>
+</body>
+</html>

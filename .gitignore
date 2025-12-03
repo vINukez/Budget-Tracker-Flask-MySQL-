@@ -1,0 +1,7 @@
+old-htmls
+static
+__pycache__
+.venv
+api.py
+db-script.sh
+project-old.py

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Budget Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root { --acc1:#f093fb; --acc2:#f5576c; }
+    *{box-sizing:border-box} body{font-family:Inter,system-ui;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);margin:0;color:#fff}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px}
+    .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .title{font-weight:800;font-size:26px}
+    .btn{border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,var(--acc1),var(--acc2));color:#fff}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .card{background:rgba(255,255,255,.08);backdrop-filter:blur(10px);border-radius:16px;padding:16px}
+    .card h3{margin:0 0 12px 0;font-size:16px;font-weight:700}
+    .row{display:flex;gap:8px}
+    input,select{width:100%;padding:12px;border-radius:12px;border:2px solid rgba(255,255,255,.15);background:rgba(255,255,255,.1);color:#fff}
+    input::placeholder{color:#d1d5db}
+    .list{margin-top:12px}
+    .tx{display:grid;grid-template-columns:140px 1fr 160px 120px 70px;gap:8px;align-items:center;padding:10px;border-radius:10px;background:rgba(255,255,255,.06);margin-bottom:8px}
+    .chip{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.15)}
+    .muted{color:#e5e7eb}
+    .del{cursor:pointer;border:0;background:transparent;color:#fff;font-weight:700}
+    .error{margin-top:8px;color:#ffe0e0}
+    canvas{width:100%;height:280px}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}.tx{grid-template-columns:140px 1fr 120px 70px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="title">Dein Dashboard</div>
+      <div class="row">
+        <a href="{{ url_for('logout') }}" class="btn" style="text-decoration:none">Logout</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Kategorie hinzufügen</h3>
+        <div class="row">
+          <input id="catName" placeholder="Name z.B. Lebensmittel" />
+          <input id="catColor" type="color" value="#f093fb" title="Farbe wählen" style="max-width:70px;padding:6px"/>
+          <button class="btn" id="addCatBtn">Speichern</button>
+        </div>
+        <div id="catError" class="error"></div>
+        <div id="catChips" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"></div>
+      </div>
+
+      <div class="card">
+        <h3>Transaktion erfassen</h3>
+        <div class="row">
+          <input id="amount" type="number" min="0.01" step="0.01" placeholder="Betrag" />
+          <select id="type">
+            <option value="expense">Ausgabe</option>
+            <option value="income">Einnahme</option>
+          </select>
+        </div>
+        <div class="row" style="margin-top:8px">
+          <select id="category"><option value="">Kategorie (optional)</option></select>
+          <input id="date" type="datetime-local" />
+        </div>
+        <input id="desc" placeholder="Beschreibung (optional)" style="margin-top:8px" />
+        <div class="row" style="margin-top:8px"><button class="btn" id="addTxBtn">Transaktion speichern</button></div>
+        <div id="txError" class="error"></div>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:16px">
+      <div class="card">
+        <h3>Monats-Chart</h3>
+        <canvas id="monthChart"></canvas>
+      </div>
+      <div class="card">
+        <h3>Kategorien-Chart</h3>
+        <canvas id="catChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>Transaktionen</h3>
+      <div class="row" style="margin-bottom:8px">
+        <select id="filterCat"><option value="">Alle Kategorien</option></select>
+      </div>
+      <div id="txList" class="list"></div>
+    </div>
+  </div>
+
+<script>
+const $ = (id)=>document.getElementById(id);
+const catName = $('catName'), catColor=$('catColor'), addCatBtn=$('addCatBtn'), catChips=$('catChips'), catError=$('catError');
+const amount=$('amount'), typeSel=$('type'), catSel=$('category'), dateInp=$('date'), desc=$('desc'), addTxBtn=$('addTxBtn'), txError=$('txError');
+const txList=$('txList'), filterCat=$('filterCat');
+let categories = [], transactions = [], summary = {by_month:[], by_category:[]};
+let monthChart, catChart;
+
+function toastErr(el, msg){ el.textContent = msg; setTimeout(()=> el.textContent='', 3000); }
+
+async function api(path, opts={}){
+  const r = await fetch(path, {headers:{'Content-Type':'application/json'}, credentials:'same-origin', ...opts});
+  if(!r.ok){ const t = await r.json().catch(()=>({message:r.statusText})); throw new Error(t.message||'Fehler'); }
+  return r.json().catch(()=> ({}));
+}
+
+function renderCategories(){
+  catChips.innerHTML = '';
+  catSel.innerHTML = '<option value="">Kategorie (optional)</option>';
+  filterCat.innerHTML = '<option value="">Alle Kategorien</option>';
+  categories.forEach(c=>{
+    const chip = document.createElement('div');
+    chip.className='chip';
+    chip.style.background = c.color + '33';
+    chip.innerHTML = `<span style="width:10px;height:10px;border-radius:999px;display:inline-block;background:${c.color}"></span>${c.name}
+      <button class="del" title="Löschen">×</button>`;
+    chip.querySelector('.del').onclick = ()=> deleteCategory(c.id);
+    catChips.appendChild(chip);
+    catSel.add(new Option(c.name, c.id));
+    filterCat.add(new Option(c.name, c.id));
+  });
+}
+
+function renderTransactions(){
+  const sel = filterCat.value;
+  txList.innerHTML = '';
+  transactions.filter(t => !sel || String(t.category_id)===String(sel))
+    .forEach(t=>{
+      const row = document.createElement('div');
+      row.className='tx';
+      const sign = t.type==='income' ? '+' : '-';
+      const color = t.category_color || '#ffffff';
+      row.innerHTML = `
+        <div class="muted">${new Date(t.date).toLocaleString()}</div>
+        <div>${t.description || '—'}</div>
+        <div><span class="chip" style="background:${color}33">${t.category_name || '—'}</span></div>
+        <div style="font-weight:700">${sign}${Number(t.amount).toFixed(2)} CHF</div>
+        <button class="del" title="Löschen">×</button>
+      `;
+      row.querySelector('.del').onclick = ()=> deleteTransaction(t.id);
+      txList.appendChild(row);
+    });
+}
+
+function renderCharts(){
+  // Monats-Chart
+  const labels = summary.by_month.map(m => m.month);
+  const income = summary.by_month.map(m => m.income);
+  const expense = summary.by_month.map(m => m.expense);
+  if(monthChart){ monthChart.destroy(); }
+  monthChart = new Chart($('monthChart').getContext('2d'), {
+    type:'line',
+    data:{ labels, datasets:[
+      { label:'Einnahmen', data:income, tension:.3 },
+      { label:'Ausgaben', data:expense, tension:.3 }
+    ]},
+    options:{ plugins:{legend:{display:true}}, scales:{ y:{ beginAtZero:true } } }
+  });
+
+  // Kategorien-Chart (Nettowerte: income-expense)
+  const catLabels = summary.by_category.map(c => c.name);
+  const net = summary.by_category.map(c => (c.income - c.expense));
+  if(catChart){ catChart.destroy(); }
+  catChart = new Chart($('catChart').getContext('2d'), {
+    type:'bar',
+    data:{ labels:catLabels, datasets:[{ label:'Netto (Einnahmen - Ausgaben)', data:net }] },
+    options:{ indexAxis:'y', plugins:{legend:{display:true}}, scales:{ x:{ beginAtZero:true } } }
+  });
+}
+
+async function loadAll(){
+  categories = await api('/api/categories');
+  transactions = await api('/api/transactions');
+  summary = await api('/api/summary');
+  renderCategories();
+  renderTransactions();
+  renderCharts();
+}
+
+async function deleteCategory(id){
+  await api(`/api/categories/${id}`, {method:'DELETE'});
+  categories = categories.filter(c=>c.id!==id);
+  transactions = transactions.map(t=> t.category_id===id ? {...t, category_id:null, category_name:null, category_color:null} : t);
+  summary = await api('/api/summary');
+  renderCategories(); renderTransactions(); renderCharts();
+}
+
+async function deleteTransaction(id){
+  await api(`/api/transactions/${id}`, {method:'DELETE'});
+  transactions = transactions.filter(t=>t.id!==id);
+  summary = await api('/api/summary');
+  renderTransactions(); renderCharts();
+}
+
+addCatBtn.onclick = async ()=>{
+  try{
+    const name = catName.value.trim();
+    if(!name) return toastErr(catError, 'Name erforderlich');
+    const res = await api('/api/categories', {method:'POST', body:JSON.stringify({name, color:catColor.value})});
+    categories.push(res);
+    catName.value='';
+    renderCategories();
+  }catch(e){ toastErr(catError, e.message); }
+};
+
+addTxBtn.onclick = async ()=>{
+  try{
+    const val = parseFloat(amount.value);
+    if(!val || val<=0) return toastErr(txError, 'Betrag > 0 erforderlich');
+    const body = {
+      amount: val,
+      type: typeSel.value,
+      description: desc.value.trim(),
+      category_id: catSel.value ? Number(catSel.value) : null,
+      date: dateInp.value ? new Date(dateInp.value).toISOString() : null
+    };
+    await api('/api/transactions', {method:'POST', body:JSON.stringify(body)});
+    transactions = await api('/api/transactions'); // frisch laden
+    summary = await api('/api/summary');
+    amount.value=''; desc.value=''; dateInp.value=''; catSel.value='';
+    renderTransactions(); renderCharts();
+  }catch(e){ toastErr(txError, e.message); }
+};
+
+filterCat.onchange = renderTransactions;
+
+loadAll();
+</script>
+</body>
+</html>

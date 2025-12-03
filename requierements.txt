@@ -1,0 +1,12 @@
+flask 
+Flask 
+request jsonify
+render_template 
+redirect
+url_for 
+session
+werkzeug.security 
+generate_password_hash 
+check_password_hash
+mysql.connector
+from db_config import get_db_connection
