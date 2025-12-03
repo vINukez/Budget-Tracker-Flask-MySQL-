@@ -58,7 +58,7 @@ Die Applikation bietet folgende Hauptfunktionen:
 
 Die wichtigsten Dateien und Ordner:
 
-```text
+```bash
 Budget-Tracker-Flask-MySQL-/
 ├─ app.py               # Hauptapplikation (Flask-Routen, Logik)
 ├─ db_config.py         # Datenbankkonfiguration (Host, User, Passwort, DB-Name)
@@ -69,7 +69,7 @@ Budget-Tracker-Flask-MySQL-/
 │  ├─ login.html        # Login-Formular
 │  ├─ register.html     # Registrierungsformular
 │  └─ dashboard.html    # Dashboard mit Ausgabenübersicht & Pie Chart
-
+```
 
 **Installation und Setup**
 
