@@ -413,6 +413,6 @@ Dieses Projekt steht unter der MIT-Lizenz - siehe [LICENSE](LICENSE) Datei für 
 
 **⭐ Wenn dir dieses Projekt gefällt, gib ihm einen Stern! ⭐**
 
-Made with ❤️ by zerosploit-0
+Made by zerosploit-0
 
 </div>
