@@ -15,9 +15,9 @@
 
 ---
 
-## 📋 Über das Projekt
+##  Über das Projekt
 
-Dieses Projekt ist eine Webanwendung zur Verwaltung persönlicher Ausgaben und wurde im Rahmen des Moduls **Datenbanken und Webentwicklung (DBWE)** an der **ipso Bildung** entwickelt. Die Applikation erfüllt die Vorgaben der Praxisarbeit: eine Flask-Webapplikation mit relationaler Datenbank, Benutzerverwaltung, Geschäftslogik und REST-API.
+Dieses Projekt ist eine Webanwendung zur Verwaltung persönlicher Ausgaben und wurde im Rahmen des Moduls **Datenbanken und Webentwicklung (DBWE)** an der **ipso Bildung AG** entwickelt. Die Applikation erfüllt die Vorgaben der Praxisarbeit: eine Flask-Webapplikation mit relationaler Datenbank, Benutzerverwaltung, Geschäftslogik und REST-API.
 
 ### 🎯 Projektziele
 
@@ -29,36 +29,36 @@ Dieses Projekt ist eine Webanwendung zur Verwaltung persönlicher Ausgaben und w
 
 ---
 
-## ✨ Features
+##  Features
 
-### 🔐 Benutzerverwaltung
-- ✅ Registrierung mit eindeutigem Benutzernamen und E-Mail
-- ✅ Sicheres Login/Logout-System
-- ✅ Passwörter werden mit Werkzeug gehasht und sicher gespeichert
-- ✅ Session-basierte Authentifizierung
+###  Benutzerverwaltung
+-  Registrierung mit eindeutigem Benutzernamen und E-Mail
+-  Sicheres Login/Logout-System
+-  Passwörter werden mit Werkzeug gehasht und sicher gespeichert
+-  Session-basierte Authentifizierung
 
-### 💸 Budget- und Ausgabenverwaltung
-- ✅ Erfassen von Ausgaben (Betrag, Kategorie, Datum, Beschreibung)
-- ✅ Bearbeiten und Löschen von bestehenden Ausgaben
-- ✅ Kategorisierung (Miete, Food, Transport, Freizeit, etc.)
-- ✅ Persönliche Ausgabenübersicht pro Benutzer
+###  Budget- und Ausgabenverwaltung
+-  Erfassen von Ausgaben (Betrag, Kategorie, Datum, Beschreibung)
+-  Bearbeiten und Löschen von bestehenden Ausgaben
+-  Kategorisierung (Miete, Food, Transport, Freizeit, etc.)
+-  Persönliche Ausgabenübersicht pro Benutzer
 
-### 📊 Dashboard mit Visualisierung
-- ✅ Moderner Dashboard-Screen nach Login
-- ✅ Interaktives Kuchendiagramm (Pie Chart) der Ausgaben nach Kategorie
-- ✅ Liniendiagramm für monatlichen Verlauf
-- ✅ Echtzeit-Statistiken (Einnahmen, Ausgaben, Saldo)
-- ✅ Transaktionsliste mit Icons und Kategorien
+###  Dashboard mit Visualisierung
+-  Moderner Dashboard-Screen nach Login
+-  Interaktives Kuchendiagramm (Pie Chart) der Ausgaben nach Kategorie
+-  Liniendiagramm für monatlichen Verlauf
+-  Echtzeit-Statistiken (Einnahmen, Ausgaben, Saldo)
+-  Transaktionsliste mit Icons und Kategorien
 
-### 🌐 REST-API
-- ✅ JSON-basierte Endpunkte für externe Zugriffe
-- ✅ Authentifizierte API-Anfragen
-- ✅ CRUD-Operationen über API
-- ✅ Kompatibel mit Tools wie Postman, curl, etc.
+###  REST-API
+-  JSON-basierte Endpunkte für externe Zugriffe
+-  Authentifizierte API-Anfragen
+-  CRUD-Operationen über API
+-  Kompatibel mit Tools wie Postman, curl, etc.
 
 ---
 
-## 🛠️ Technologie-Stack
+## Technologie-Stack
 
 ### Backend
 - **Python 3.9+** - Programmiersprache
@@ -75,7 +75,7 @@ Dieses Projekt ist eine Webanwendung zur Verwaltung persönlicher Ausgaben und w
 - **Jinja2** - Template-Engine
 - **Chart.js** - Datenvisualisierung (via CDN)
 - **Inter Font** - Moderne Typografie
-- **Glassmorphism & Gradients** - Zeitgemäßes UI-Design
+- **Glassmorphism & Gradients** - Zeitgemässes UI-Design
 
 ### Deployment
 - Entwicklung: `python app.py`
@@ -103,7 +103,7 @@ Budget-Tracker-Flask-MySQL-/
 
 ---
 
-## 🚀 Installation
+##  Installation
 
 ### Voraussetzungen
 
@@ -295,7 +295,7 @@ curl -X GET http://127.0.0.1:5000/api/transactions \
 
 ---
 
-## 🧪 Tests
+##  Tests
 
 ### Manuelle Testfälle
 
@@ -312,7 +312,7 @@ curl -X GET http://127.0.0.1:5000/api/transactions \
 
 ---
 
-## 📸 Screenshots
+##  Screenshots
 
 ### Landing Page
 ![Landing Page](https://github.com/zerosploit-0/Budget-Tracker-Flask-MySQL-/blob/main/Landing-Page.png)
@@ -348,7 +348,7 @@ python -c "import secrets; print(secrets.token_hex(32))"
 
 ---
 
-## 🐛 Bekannte Probleme & Lösungen
+##  Bekannte Probleme & Lösungen
 
 ### Problem: MySQL Connection Error
 
@@ -371,7 +371,7 @@ pip install -r requirements.txt
 
 ---
 
-## 📚 Weitere Ressourcen
+##  Weitere Ressourcen
 
 - [Flask Dokumentation](https://flask.palletsprojects.com/)
 - [MySQL Connector Python](https://dev.mysql.com/doc/connector-python/en/)
@@ -380,7 +380,7 @@ pip install -r requirements.txt
 
 ---
 
-## 👨‍💻 Autor
+## 👨 Autor
 
 **zerosploit-0**
 - GitHub: [@zerosploit-0](https://github.com/zerosploit-0)
@@ -390,7 +390,7 @@ pip install -r requirements.txt
 
 ## 🎓 Projektkontext
 
-**Schule:** ipso Bildung  
+**Schule:** ipso Bildung AG
 **Modul:** Datenbanken und Webentwicklung (DBWE)  
 **Typ:** Praxisarbeit  
 **Semester:** 2025/2026
